@@ -5,7 +5,7 @@ import Image from "next/image"
 import { FaChevronDown, FaTrophy, FaMedal } from "react-icons/fa6"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
-import { useMotionTemplate, useMotionValue, motion } from "framer-motion"
+import { useMotionTemplate, useMotionValue, motion } from "motion/react"
 import {
   Select,
   SelectContent,
