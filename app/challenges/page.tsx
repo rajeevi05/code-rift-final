@@ -49,6 +49,9 @@ export default function ChallengesPage() {
         }}
       />
 
+      {/* Shadow overlay for smaller screens and iPad */}
+      <div className="absolute inset-0 bg-black/50 lg:hidden pointer-events-none z-5" />
+
       {/* Black gradient at the top - responsive height */}
       <div className="absolute top-0 left-0 right-0 h-10 sm:h-12 md:h-16 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-5" />
 

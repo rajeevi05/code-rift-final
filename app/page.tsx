@@ -153,7 +153,7 @@ export default function Home() {
       {/* Hero Section */}
       <section
         id="home"
-        className="relative min-h-screen flex flex-col items-center justify-center px-4 py-20 fade-in"
+        className="relative min-h-screen flex flex-col items-center justify-center px-4 py-1 md:py-20 fade-in"
         style={{
           backgroundImage: "url(/bg.jpg)",
           backgroundSize: "cover",
@@ -180,56 +180,81 @@ export default function Home() {
           />
         </div>
 
-        {/* Black gradient transition at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-10" />
+        {/* Black gradient transition at bottom - larger for smaller screens */}
+        <div className="absolute bottom-0 left-0 right-0 h-16 md:h-32 bg-gradient-to-t from-black via-black/90 to-transparent pointer-events-none z-10" />
       </section>
 
       {/* Challenges Section */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        /* Default: phone screens - center the background and cover */
+        #challenges {
+          background-image: url(/vecna_vs_steve.png);
+          background-position: center left 20%;
+          background-repeat: no-repeat;
+          background-attachment: scroll;
+          background-size: cover;
+        }
+
+        /* Tablets up to iPad Pro (~768px to 1023px): match previous phone layout (shifted left 48%) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+          #challenges {
+            background-position: left 48%;
+          }
+        }
+
+        /* Desktop: restore original desktop layout */
+        @media (min-width: 1024px) {
+          #challenges {
+            background-size: 90%;
+            background-position: left 30%;
+          }
+        }
+      `,
+        }}
+      />
       <section
         id="challenges"
-        className="relative min-h-screen py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 mt-16 md:mt-24"
-        style={{
-          backgroundImage: "url(/vecna_vs_steve.png)",
-          backgroundSize: "90%",
-          backgroundPosition: "left 30%",
-          backgroundRepeat: "no-repeat",
-          backgroundAttachment: "scroll",
-        }}
+        className="relative min-h-screen py-1 sm:py-1 md:py-20 px-4 sm:px-6 md:px-8 mt-1 md:mt-24"
       >
+        {/* Shadow overlay for smaller screens and iPad */}
+        <div className="absolute inset-0 bg-black/50 lg:hidden pointer-events-none z-5" />
+
         {/* Black gradient overlay on background image */}
         <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black via-black/60 to-transparent pointer-events-none z-5" />
 
-        {/* Black gradient transition at top */}
-        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-10" />
+        {/* Black gradient transition at top - larger for smaller screens */}
+        <div className="absolute top-0 left-0 right-0 h-16 md:h-32 bg-gradient-to-b from-black via-black/90 to-transparent pointer-events-none z-10" />
 
         {/* Black gradient at the top - responsive height */}
-        <div className="absolute top-0 left-0 right-0 h-10 sm:h-12 md:h-16 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-5" />
+        <div className="absolute top-0 left-0 right-0 h-2 sm:h-2 md:h-16 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-5" />
 
         {/* Content */}
         <div className="relative z-20 pt-28 sm:pt-32 slide-up">
           <div
-            className="ml-auto max-w-5xl mr-4 md:mr-8 lg:mr-16"
-            style={{ transform: "translateY(-26%)" }}
+            className="mx-auto lg:ml-auto lg:mr-8 xl:mr-16 max-w-5xl px-4 md:px-8"
+            style={{ transform: "translateY(-6%)" }}
           >
             {/* Header */}
-            <div className="mb-3 sm:mb-4 text-right">
+            <div className="mb-10 sm:mb-12 md:mb-14 text-center md:text-right">
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-3 tracking-tight heading-font">CHALLENGES</h1>
             </div>
 
-            {/* Challenges List - in invisible square box aligned to the right */}
-            <div className="flex justify-end fade-in">
+            {/* Challenges List - left aligned on small, right aligned on large */}
+            <div className="flex justify-start lg:justify-end fade-in">
               <div className="w-full max-w-xs sm:max-w-sm md:max-w-md aspect-square flex flex-col justify-center space-y-6">
                 {challenges.map((challenge, index) => {
                   const isExpanded = expandedId === challenge.id
                   return (
                     <div
                       key={challenge.id}
-                      className="group cursor-pointer transition-all duration-500 ease-out text-right"
+                      className="group cursor-pointer transition-all duration-500 ease-out text-left lg:text-right"
                       onClick={() => setExpandedId(isExpanded ? null : challenge.id)}
                     >
                       {/* Challenge Number */}
                       <div className="mb-2">
-                        <span className="text-xl sm:text-2xl font-light text-gray-500 tracking-tight">
+                        <span className="text-3xl sm:text-4xl md:text-5xl lg:text-4xl font-light text-gray-500 tracking-tight">
                           {String(index + 1).padStart(2, '0')}
                         </span>
                       </div>
@@ -237,12 +262,12 @@ export default function Home() {
                       {/* Challenge Content */}
                       <div className="flex flex-col gap-2">
                         {/* Title */}
-                        <h2 className="text-sm sm:text-base md:text-lg font-semibold text-white tracking-tight heading-font group-hover:text-gray-200 transition-colors duration-300">
+                        <h2 className="text-lg sm:text-xl md:text-2xl lg:text-xl font-semibold text-white tracking-tight heading-font group-hover:text-gray-200 transition-colors duration-300">
                           {challenge.title}
                         </h2>
 
                         {/* Description */}
-                        <p className="text-xs sm:text-sm text-gray-400 font-light leading-relaxed mb-2">
+                        <p className="text-base sm:text-lg lg:text-base text-gray-400 font-light leading-relaxed mb-2">
                           {challenge.description}
                         </p>
 
@@ -251,7 +276,7 @@ export default function Home() {
                           isExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
                         }`}>
                           <div className="pt-2 border-t border-gray-800">
-                            <p className="text-xs text-gray-300 font-light leading-relaxed mb-3">
+                            <p className="text-base lg:text-sm text-gray-300 font-light leading-relaxed mb-3">
                               {challenge.details}
                             </p>
                             
@@ -262,7 +287,7 @@ export default function Home() {
                                   key={i}
                                   className="text-center py-1.5 px-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300 border border-transparent hover:border-gray-700"
                                 >
-                                  <p className="text-xs text-gray-300 font-light">
+                                  <p className="text-sm sm:text-base lg:text-sm text-gray-300 font-light">
                                     {tip}
                                   </p>
                                 </div>
@@ -272,7 +297,7 @@ export default function Home() {
                         </div>
 
                         {/* Expand Indicator */}
-                        <div className="flex justify-end mt-1">
+                        <div className="flex justify-start lg:justify-end mt-1">
                           <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-all duration-300">
                             <FaChevronDown
                               size={12}
@@ -289,27 +314,44 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Black gradient transition at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-10" />
+        {/* Black gradient transition at bottom - larger for smaller screens */}
+        <div className="absolute bottom-0 left-0 right-0 h-16 md:h-32 bg-gradient-to-t from-black via-black/90 to-transparent pointer-events-none z-10" />
       </section>
 
       {/* Timeline Section */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        /* Default: phone & tablet (smaller than laptop) - fill screen with air-max and center */
+        #timeline {
+          background-image: url(/air-max.png);
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-attachment: scroll;
+          background-size: cover;
+        }
+
+        /* Laptop and larger (desktop) - restore original layout */
+        @media (min-width: 1024px) {
+          #timeline {
+            background-size: 40%;
+            background-position: center 70%;
+          }
+        }
+      `,
+        }}
+      />
       <section
         id="timeline"
-        className="relative min-h-screen pt-12 md:pt-16 pb-24 md:pb-32 px-4 font-sans selection:bg-[#c12d28] selection:text-white mt-12 md:mt-[72px] fade-in"
-        style={{
-          backgroundImage: "url(/air-max.png)",
-          backgroundSize: "40%",
-          backgroundPosition: "center 70%",
-          backgroundRepeat: "no-repeat",
-          backgroundAttachment: "scroll",
-        }}
+        className="relative min-h-screen pt-1 md:pt-16 pb-6 md:pb-32 px-4 font-sans selection:bg-[#c12d28] selection:text-white mt-1 md:mt-[72px] fade-in transform translate-y-[20%] lg:translate-y-0"
       >
-        {/* Black gradient transition at top */}
-        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-10" />
+        {/* Dark overlay for smaller screens */}
+        <div className="absolute inset-0 bg-black/60 lg:hidden pointer-events-none z-5" />
+        {/* Black gradient transition at top - larger for smaller screens */}
+        <div className="absolute top-0 left-0 right-0 h-16 md:h-32 bg-gradient-to-b from-black via-black/90 to-transparent pointer-events-none z-10" />
 
         {/* Black gradient at the top - responsive height */}
-        <div className="absolute top-0 left-0 right-0 h-20 sm:h-24 md:h-32 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-5" />
+        <div className="absolute top-0 left-0 right-0 h-2 sm:h-2 md:h-32 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-5" />
 
         {/* Content */}
         <div className="relative z-20 slide-up">
@@ -360,20 +402,27 @@ export default function Home() {
       </section>
 
       {/* Awards Section */}
+      <style dangerouslySetInnerHTML={{__html: `
+        /* Phones & tablets (smaller than laptop) - increase crew.png by 40% (70% * 1.4 = 98%) */
+        #awards {
+          background-image: url(/crew.png);
+          background-position: center bottom;
+          background-repeat: no-repeat;
+          background-attachment: scroll;
+          background-size: 98%;
+        }
+
+        /* Laptop and larger - keep original 70% size */
+        @media (min-width: 1024px) {
+          #awards {
+            background-size: 70%;
+          }
+        }
+      `}} />
       <section
         id="awards"
-        className="relative min-h-screen flex items-center justify-center px-4 mt-0 fade-in"
-        style={{
-          backgroundImage: "url(/crew.png)",
-          backgroundSize: "70%",
-          backgroundPosition: "center bottom",
-          backgroundRepeat: "no-repeat",
-          backgroundAttachment: "scroll",
-        }}
+        className="relative min-h-screen flex items-center justify-center px-4 mt-1 md:mt-0 fade-in"
       >
-        {/* Black gradient transition at top */}
-        <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-10" />
-
         {/* Content */}
         <div
           className="relative z-20 text-center max-w-4xl py-100 slide-up"
@@ -387,14 +436,14 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Black gradient transition at bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none z-10" />
+        {/* Black gradient transition at bottom - larger for smaller screens */}
+        <div className="absolute bottom-0 left-0 right-0 h-16 md:h-32 bg-gradient-to-t from-black via-black/90 to-transparent pointer-events-none z-10" />
       </section>
 
       {/* Register Section */}
       <section
         id="register"
-        className="relative min-h-screen flex flex-col justify-center items-center py-12 px-4 md:py-20 font-sans mt-11 md:mt-[67px] fade-in"
+        className="relative min-h-screen flex flex-col justify-center items-center py-1 px-4 md:py-20 font-sans mt-1 md:mt-[67px] fade-in"
       >
         {/* Steve (left) and Dusty (right) background characters */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -417,8 +466,8 @@ export default function Home() {
             />
           </div>
         </div>
-        {/* Black gradient transition at top */}
-        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-10" />
+        {/* Black gradient transition at top - larger for smaller screens */}
+        <div className="absolute top-0 left-0 right-0 h-16 md:h-32 bg-gradient-to-b from-black via-black/90 to-transparent pointer-events-none z-10" />
 
         {/* Shadow overlay for smaller screens and iPad */}
         <div className="absolute inset-0 bg-black/50 lg:hidden pointer-events-none z-5" />

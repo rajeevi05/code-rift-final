@@ -11,9 +11,9 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "CTRL + ALT + CREATE | Hackathon Event",
+  title: "Code Rift",
   description:
-    "A 3-day creativity & AI innovation event for BTech students. Join the Cybernauts at CVR College of Engineering.",
+    "A 2-day creativity & AI innovation event at CVR College of Engineering",
   generator: "v0.app",
   icons: {
     icon: [
