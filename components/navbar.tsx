@@ -76,7 +76,7 @@ export default function Navbar() {
           {/* CYBERNAUTS on the left */}
           <div className="absolute left-3 sm:left-4">
             <span className="font-bold text-xs sm:text-sm" style={{ color: "#c12d28" }}>
-              CYBERNAUTS
+              Cybernauts
             </span>
           </div>
 

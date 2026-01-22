@@ -13,17 +13,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
 export default function Home() {
   const [expandedId, setExpandedId] = useState<number | null>(null)
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    fullName: "",
+    rollNumber: "",
     email: "",
-    phone: "",
-    college: "",
+    mobileNumber: "",
     year: "",
-    branch: "",
+    teamSize: "",
+    teamLeaderName: "",
+    teamLeaderPhone: "",
+    teamMember1Name: "",
+    teamMember1Phone: "",
+    teamMember2Name: "",
+    teamMember2Phone: "",
+    teamMember3Name: "",
+    teamMember3Phone: "",
+    college: "",
+    collegeOther: "",
+    foodChoice: "",
   })
   const [submitted, setSubmitted] = useState(false)
 
@@ -138,15 +149,51 @@ export default function Home() {
     }))
   }
 
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+      // Reset team member fields if team size changes
+      ...(name === "teamSize" && {
+        teamMember2Name: "",
+        teamMember2Phone: "",
+        teamMember3Name: "",
+        teamMember3Phone: "",
+      }),
+    }))
+  }
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     console.log("Form submitted:", formData)
     setSubmitted(true)
     setTimeout(() => {
-      setFormData({ firstName: "", lastName: "", email: "", phone: "", college: "", year: "", branch: "" })
+      setFormData({
+        fullName: "",
+        rollNumber: "",
+        email: "",
+        mobileNumber: "",
+        year: "",
+        teamSize: "",
+        teamLeaderName: "",
+        teamLeaderPhone: "",
+        teamMember1Name: "",
+        teamMember1Phone: "",
+        teamMember2Name: "",
+        teamMember2Phone: "",
+        teamMember3Name: "",
+        teamMember3Phone: "",
+        college: "",
+        collegeOther: "",
+        foodChoice: "",
+      })
       setSubmitted(false)
     }, 3000)
   }
+
+  const teamSize = formData.teamSize ? parseInt(formData.teamSize) : 0
+  const showMember2 = teamSize >= 3
+  const showMember3 = teamSize >= 4
 
   return (
     <div className="relative bg-black overflow-hidden">
@@ -169,7 +216,7 @@ export default function Home() {
         <div className="absolute top-0 left-0 right-0 h-20 sm:h-24 md:h-32 bg-gradient-to-b from-black via-black/80 to-transparent pointer-events-none z-5" />
 
         {/* Title image */}
-        <div className="absolute left-1/2 -translate-x-1/2 lg:left-12 lg:translate-x-0 xl:left-16 top-[20%] sm:top-1/4 md:top-1/3 -translate-y-1/2 z-10 max-w-[350px] sm:max-w-[400px] md:max-w-[400px] lg:max-w-[450px] slide-in-left">
+        <div className="absolute left-1/2 -translate-x-1/2 lg:left-12 lg:translate-x-0 xl:left-16 top-1/2 -translate-y-1/2 z-10 max-w-[350px] sm:max-w-[400px] md:max-w-[400px] lg:max-w-[450px] slide-in-left">
           <Image
             src="/title.png"
             alt="CODE RIFT"
@@ -178,6 +225,17 @@ export default function Home() {
             className="w-full h-auto"
             priority
           />
+          {/* <div className="mt-2 sm:mt-3 md:mt-4 text-center lg:text-left lg:translate-x-13">
+          <p className="text-white text-sm sm:text-base md:text-lg lg:text-xl font-bold mb-1 sm:mb-2 tracking-wide heading-font">
+              Inter-college Hackathon
+            </p>
+            <p className="text-white text-sm sm:text-base md:text-lg lg:text-xl font-bold mb-1 sm:mb-2 tracking-wide heading-font">
+              21st January, 2026
+            </p>
+            <p className="text-white text-xs sm:text-sm md:text-base lg:text-lg font-bold heading-font">
+              CVR College Of Engineering
+            </p>
+          </div> */}
         </div>
 
         {/* Black gradient transition at bottom - larger for smaller screens */}
@@ -491,26 +549,56 @@ export default function Home() {
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
               <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2">
                 <LabelInputContainer>
-                  <Label htmlFor="firstName" className="text-neutral-200">First Name *</Label>
+                  <Label htmlFor="fullName" className="text-neutral-200">Full Name *</Label>
                   <Input
-                    id="firstName"
-                    name="firstName"
-                    placeholder="John"
+                    id="fullName"
+                    name="fullName"
+                    placeholder="John Doe"
                     type="text"
-                    value={formData.firstName}
+                    value={formData.fullName}
                     onChange={handleChange}
                     required
                     className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
                   />
                 </LabelInputContainer>
+
                 <LabelInputContainer>
-                  <Label htmlFor="lastName" className="text-neutral-200">Last Name *</Label>
+                  <Label htmlFor="rollNumber" className="text-neutral-200">Roll Number (if you are from CVR)</Label>
                   <Input
-                    id="lastName"
-                    name="lastName"
-                    placeholder="Doe"
+                    id="rollNumber"
+                    name="rollNumber"
+                    placeholder="Enter your roll number"
                     type="text"
-                    value={formData.lastName}
+                    value={formData.rollNumber}
+                    onChange={handleChange}
+                    className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
+                  />
+                </LabelInputContainer>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2">
+                <LabelInputContainer>
+                  <Label htmlFor="email" className="text-neutral-200">Email ID *</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    placeholder="john@example.com"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
+                  />
+                </LabelInputContainer>
+
+                <LabelInputContainer>
+                  <Label htmlFor="mobileNumber" className="text-neutral-200">Mobile Number *</Label>
+                  <Input
+                    id="mobileNumber"
+                    name="mobileNumber"
+                    placeholder="+91 XXXXXXXXXX"
+                    type="tel"
+                    value={formData.mobileNumber}
                     onChange={handleChange}
                     required
                     className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
@@ -518,85 +606,222 @@ export default function Home() {
                 </LabelInputContainer>
               </div>
 
-              <LabelInputContainer>
-                <Label htmlFor="email" className="text-neutral-200">Email Address *</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  placeholder="john@example.com"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
-                />
-              </LabelInputContainer>
-
               <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2">
-                <LabelInputContainer>
-                  <Label htmlFor="phone" className="text-neutral-200">Phone Number *</Label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    placeholder="+91 XXXXXXXXXX"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    required
-                    className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
-                  />
-                </LabelInputContainer>
                 <LabelInputContainer>
                   <Label htmlFor="year" className="text-neutral-200">Year of Study *</Label>
                   <Select
                     value={formData.year}
-                    onValueChange={(value) => {
-                      setFormData((prev) => ({
-                        ...prev,
-                        year: value,
-                      }))
-                    }}
+                    onValueChange={(value) => handleSelectChange("year", value)}
                     required
                   >
                     <GlowSelectTrigger className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500">
                       <SelectValue placeholder="Select Year" />
                     </GlowSelectTrigger>
                     <SelectContent className="bg-black/90 border-white/10 text-white backdrop-blur-xl">
-                      <SelectItem value="1st" className="focus:bg-[#c12d28]/50 focus:text-white">1st Year</SelectItem>
                       <SelectItem value="2nd" className="focus:bg-[#c12d28]/50 focus:text-white">2nd Year</SelectItem>
                       <SelectItem value="3rd" className="focus:bg-[#c12d28]/50 focus:text-white">3rd Year</SelectItem>
                       <SelectItem value="4th" className="focus:bg-[#c12d28]/50 focus:text-white">4th Year</SelectItem>
                     </SelectContent>
                   </Select>
                 </LabelInputContainer>
+
+                <LabelInputContainer>
+                  <Label htmlFor="teamSize" className="text-neutral-200">Team Size *</Label>
+                  <Select
+                    value={formData.teamSize}
+                    onValueChange={(value) => handleSelectChange("teamSize", value)}
+                    required
+                  >
+                    <GlowSelectTrigger className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500">
+                      <SelectValue placeholder="Select Team Size" />
+                    </GlowSelectTrigger>
+                    <SelectContent className="bg-black/90 border-white/10 text-white backdrop-blur-xl">
+                      <SelectItem value="2" className="focus:bg-[#c12d28]/50 focus:text-white">2</SelectItem>
+                      <SelectItem value="3" className="focus:bg-[#c12d28]/50 focus:text-white">3</SelectItem>
+                      <SelectItem value="4" className="focus:bg-[#c12d28]/50 focus:text-white">4</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </LabelInputContainer>
               </div>
+
+              <div className="border-t border-white/10 pt-4 mt-4">
+                <h3 className="text-lg font-semibold text-neutral-200 mb-4">Team Leader Information</h3>
+                <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2">
+                  <LabelInputContainer>
+                    <Label htmlFor="teamLeaderName" className="text-neutral-200">Team Leader Name *</Label>
+                    <Input
+                      id="teamLeaderName"
+                      name="teamLeaderName"
+                      placeholder="Team Leader Name"
+                      type="text"
+                      value={formData.teamLeaderName}
+                      onChange={handleChange}
+                      required
+                      className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
+                    />
+                  </LabelInputContainer>
+                  <LabelInputContainer>
+                    <Label htmlFor="teamLeaderPhone" className="text-neutral-200">Team Leader phone number *</Label>
+                    <Input
+                      id="teamLeaderPhone"
+                      name="teamLeaderPhone"
+                      placeholder="+91 XXXXXXXXXX"
+                      type="tel"
+                      value={formData.teamLeaderPhone}
+                      onChange={handleChange}
+                      required
+                      className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
+                    />
+                  </LabelInputContainer>
+                </div>
+              </div>
+
+              <div className="border-t border-white/10 pt-4 mt-4">
+                <h3 className="text-lg font-semibold text-neutral-200 mb-4">Team Member 1</h3>
+                <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2">
+                  <LabelInputContainer>
+                    <Label htmlFor="teamMember1Name" className="text-neutral-200">Team Member 1 Name *</Label>
+                    <Input
+                      id="teamMember1Name"
+                      name="teamMember1Name"
+                      placeholder="Team Member 1 Name"
+                      type="text"
+                      value={formData.teamMember1Name}
+                      onChange={handleChange}
+                      required
+                      className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
+                    />
+                  </LabelInputContainer>
+                  <LabelInputContainer>
+                    <Label htmlFor="teamMember1Phone" className="text-neutral-200">Team Member 1 phone number *</Label>
+                    <Input
+                      id="teamMember1Phone"
+                      name="teamMember1Phone"
+                      placeholder="+91 XXXXXXXXXX"
+                      type="tel"
+                      value={formData.teamMember1Phone}
+                      onChange={handleChange}
+                      required
+                      className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
+                    />
+                  </LabelInputContainer>
+                </div>
+              </div>
+
+              {showMember2 && (
+                <div className="border-t border-white/10 pt-4 mt-4">
+                  <h3 className="text-lg font-semibold text-neutral-200 mb-4">Team Member 2</h3>
+                  <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2">
+                    <LabelInputContainer>
+                      <Label htmlFor="teamMember2Name" className="text-neutral-200">Team Member 2 Name</Label>
+                      <Input
+                        id="teamMember2Name"
+                        name="teamMember2Name"
+                        placeholder="Team Member 2 Name"
+                        type="text"
+                        value={formData.teamMember2Name}
+                        onChange={handleChange}
+                        className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
+                      />
+                    </LabelInputContainer>
+                    <LabelInputContainer>
+                      <Label htmlFor="teamMember2Phone" className="text-neutral-200">Team Member 2 phone number</Label>
+                      <Input
+                        id="teamMember2Phone"
+                        name="teamMember2Phone"
+                        placeholder="+91 XXXXXXXXXX"
+                        type="tel"
+                        value={formData.teamMember2Phone}
+                        onChange={handleChange}
+                        className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
+                      />
+                    </LabelInputContainer>
+                  </div>
+                </div>
+              )}
+
+              {showMember3 && (
+                <div className="border-t border-white/10 pt-4 mt-4">
+                  <h3 className="text-lg font-semibold text-neutral-200 mb-4">Team Member 3</h3>
+                  <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2">
+                    <LabelInputContainer>
+                      <Label htmlFor="teamMember3Name" className="text-neutral-200">Team Member 3 Name</Label>
+                      <Input
+                        id="teamMember3Name"
+                        name="teamMember3Name"
+                        placeholder="Team Member 3 Name"
+                        type="text"
+                        value={formData.teamMember3Name}
+                        onChange={handleChange}
+                        className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
+                      />
+                    </LabelInputContainer>
+                    <LabelInputContainer>
+                      <Label htmlFor="teamMember3Phone" className="text-neutral-200">Team Member 3 phone number</Label>
+                      <Input
+                        id="teamMember3Phone"
+                        name="teamMember3Phone"
+                        placeholder="+91 XXXXXXXXXX"
+                        type="tel"
+                        value={formData.teamMember3Phone}
+                        onChange={handleChange}
+                        className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
+                      />
+                    </LabelInputContainer>
+                  </div>
+                </div>
+              )}
 
               <LabelInputContainer>
                 <Label htmlFor="college" className="text-neutral-200">College *</Label>
-                <Input
-                  id="college"
-                  name="college"
-                  placeholder="CVR College of Engineering"
-                  type="text"
+                <Select
                   value={formData.college}
-                  onChange={handleChange}
+                  onValueChange={(value) => handleSelectChange("college", value)}
                   required
-                  className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
-                />
+                >
+                  <GlowSelectTrigger className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500">
+                    <SelectValue placeholder="Select College" />
+                  </GlowSelectTrigger>
+                  <SelectContent className="bg-black/90 border-white/10 text-white backdrop-blur-xl">
+                    <SelectItem value="CVR" className="focus:bg-[#c12d28]/50 focus:text-white">CVR College of Engineering</SelectItem>
+                    <SelectItem value="Other" className="focus:bg-[#c12d28]/50 focus:text-white">Other</SelectItem>
+                  </SelectContent>
+                </Select>
               </LabelInputContainer>
 
+              {formData.college === "Other" && (
+                <LabelInputContainer>
+                  <Label htmlFor="collegeOther" className="text-neutral-200">College Name *</Label>
+                  <Input
+                    id="collegeOther"
+                    name="collegeOther"
+                    placeholder="Enter your college name"
+                    type="text"
+                    value={formData.collegeOther}
+                    onChange={handleChange}
+                    required={formData.college === "Other"}
+                    className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
+                  />
+                </LabelInputContainer>
+              )}
+
               <LabelInputContainer>
-                <Label htmlFor="branch" className="text-neutral-200">Branch/Department *</Label>
-                <Input
-                  id="branch"
-                  name="branch"
-                  placeholder="e.g., CSE, ECE, Mechanical"
-                  type="text"
-                  value={formData.branch}
-                  onChange={handleChange}
+                <Label className="text-neutral-200 mb-3 block">Food choice *</Label>
+                <RadioGroup
+                  value={formData.foodChoice}
+                  onValueChange={(value) => handleSelectChange("foodChoice", value)}
                   required
-                  className="bg-black/50 border-white/10 text-white placeholder:text-neutral-500"
-                />
+                  className="flex flex-row gap-6"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="veg" id="veg" className="border-white/30 text-[#c12d28] focus:ring-[#c12d28]" />
+                    <Label htmlFor="veg" className="text-neutral-200 cursor-pointer font-normal">Veg</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="non-veg" id="non-veg" className="border-white/30 text-[#c12d28] focus:ring-[#c12d28]" />
+                    <Label htmlFor="non-veg" className="text-neutral-200 cursor-pointer font-normal">Non-veg</Label>
+                  </div>
+                </RadioGroup>
               </LabelInputContainer>
 
               <button
